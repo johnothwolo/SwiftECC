@@ -1,16 +1,18 @@
 //
-//  CryptoKitTest.swift
+//  SwiftCryptoTest.swift
 //  SwiftECCTests
 //
 //  Created by Leif Ibsen on 27/01/2022.
+//  Modified on 11/28/23
 //
 
 import XCTest
 @testable import SwiftECC
 import Crypto
 
+
 // Test compatibility with Swift CryptoKit
-class CryptoKitTest: XCTestCase {
+class SwiftCryptoTest: XCTestCase {
 
     static let message = "The quick brown fox jumps over the lazy dog!".data(using: .utf8)!
 

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import CryptoKit
+import Crypto
 import ASN1
 import BigInt
 
