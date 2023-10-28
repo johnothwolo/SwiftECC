@@ -215,9 +215,9 @@ public class ECPublicKey: CustomStringConvertible {
         let (R, S) = computeRS()
         let (key, nonce) = Cipher.kdf(32, 12, S, R)
         do {
-            let cryptoKitKey = CryptoKit.SymmetricKey(data: key)
-            let cryptoKitNonce = try CryptoKit.ChaChaPoly.Nonce(data: nonce)
-            let sealbox = try CryptoKit.ChaChaPoly.seal(msg, using: cryptoKitKey, nonce: cryptoKitNonce, authenticating: aad)
+            let cryptoKitKey = Crypto.SymmetricKey(data: key)
+            let cryptoKitNonce = try Crypto.ChaChaPoly.Nonce(data: nonce)
+            let sealbox = try Crypto.ChaChaPoly.seal(msg, using: cryptoKitKey, nonce: cryptoKitNonce, authenticating: aad)
             return R + Bytes(sealbox.ciphertext) + Bytes(sealbox.tag)
         } catch {
             fatalError("encryptChaCha: \(error)")
@@ -246,9 +246,9 @@ public class ECPublicKey: CustomStringConvertible {
         let keySize = cipher == .AES128 ? AES.keySize128 : (cipher == .AES192 ? AES.keySize192 : AES.keySize256)
         let (key, nonce) = Cipher.kdf(keySize, 12, S, R)
         do {
-            let cryptoKitKey = CryptoKit.SymmetricKey(data: key)
-            let cryptoKitNonce = try CryptoKit.AES.GCM.Nonce(data: nonce)
-            let sealbox = try CryptoKit.AES.GCM.seal(msg, using: cryptoKitKey, nonce: cryptoKitNonce, authenticating: aad)
+            let cryptoKitKey = Crypto.SymmetricKey(data: key)
+            let cryptoKitNonce = try Crypto.AES.GCM.Nonce(data: nonce)
+            let sealbox = try Crypto.AES.GCM.seal(msg, using: cryptoKitKey, nonce: cryptoKitNonce, authenticating: aad)
             return R + Bytes(sealbox.ciphertext) + Bytes(sealbox.tag)
         } catch {
             fatalError("encryptAESGCM: \(error)")

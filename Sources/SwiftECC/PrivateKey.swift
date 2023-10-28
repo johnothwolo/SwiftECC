@@ -430,10 +430,10 @@ public class ECPrivateKey: CustomStringConvertible {
         let tag = Bytes(msg[msg.count - tagLength ..< msg.count])
         let (key, nonce) = Cipher.kdf(keySize, 12, self.domain.align(S.x.asMagnitudeBytes()), R)
         do {
-            let cryptoKitKey = CryptoKit.SymmetricKey(data: key)
-            let cryptoKitNonce = try CryptoKit.ChaChaPoly.Nonce(data: nonce)
-            let sealbox = try CryptoKit.ChaChaPoly.SealedBox(nonce: cryptoKitNonce, ciphertext: cipherText, tag: tag)
-            return try Bytes(CryptoKit.ChaChaPoly.open(sealbox, using: cryptoKitKey, authenticating: aad))
+            let cryptoKitKey = Crypto.SymmetricKey(data: key)
+            let cryptoKitNonce = try Crypto.ChaChaPoly.Nonce(data: nonce)
+            let sealbox = try Crypto.ChaChaPoly.SealedBox(nonce: cryptoKitNonce, ciphertext: cipherText, tag: tag)
+            return try Bytes(Crypto.ChaChaPoly.open(sealbox, using: cryptoKitKey, authenticating: aad))
         } catch {
             throw ECException.authentication
         }
@@ -466,10 +466,10 @@ public class ECPrivateKey: CustomStringConvertible {
         let tag = Bytes(msg[msg.count - tagLength ..< msg.count])
         let (key, nonce) = Cipher.kdf(keySize, 12, self.domain.align(S.x.asMagnitudeBytes()), R)
         do {
-            let cryptoKitKey = CryptoKit.SymmetricKey(data: key)
-            let cryptoKitNonce = try CryptoKit.AES.GCM.Nonce(data: nonce)
-            let sealbox = try CryptoKit.AES.GCM.SealedBox(nonce: cryptoKitNonce, ciphertext: cipherText, tag: tag)
-            return try Bytes(CryptoKit.AES.GCM.open(sealbox, using: cryptoKitKey, authenticating: aad))
+            let cryptoKitKey = Crypto.SymmetricKey(data: key)
+            let cryptoKitNonce = try Crypto.AES.GCM.Nonce(data: nonce)
+            let sealbox = try Crypto.AES.GCM.SealedBox(nonce: cryptoKitNonce, ciphertext: cipherText, tag: tag)
+            return try Bytes(Crypto.AES.GCM.open(sealbox, using: cryptoKitKey, authenticating: aad))
         } catch {
             throw ECException.authentication
         }
